@@ -107,6 +107,36 @@ Route::post('/webhooks/ideamart', function (Request $request) {
 });
 ```
 
+### Adding another provider
+
+Ideamart and mSpace are the two built-in drivers, but the manager isn't
+closed for extension - register any other `CarrierDriver` (a different DCB
+gateway, an alternate/v2 implementation of an existing one, a test double)
+from your own `AppServiceProvider::boot()`, no fork required:
+
+```php
+use DcbLk\Contracts\CarrierDriver;
+use DcbLk\Facades\DcbLk;
+use Illuminate\Contracts\Foundation\Application;
+
+DcbLk::extend('dialog', function (Application $app, array $config) {
+    return new DialogDriver($config); // implements CarrierDriver
+});
+```
+
+Add a matching `dcb-lk.drivers.dialog` entry to your published config (or
+read your own env vars inside the closure instead) and set
+`DCB_LK_DRIVER=dialog` - or pass `'dialog'` explicitly to `DcbLk::driver()`.
+`extend()` can also override a built-in name, e.g. to swap in your own
+`IdeamartDriver` subclass without touching this package.
+
+If your driver fits the same request/response shape as Ideamart/mSpace
+(`{statusCode, statusDetail, ...}` JSON over HTTP), extending
+`DcbLk\Drivers\AbstractCarrierDriver` gets you the shared HTTP/logging/
+error-handling for free - implement just the URL-building methods, as
+`IdeamartDriver`/`MSpaceDriver` do. Otherwise implement `CarrierDriver`
+directly.
+
 ### Grace periods for a `PENDING`/`TEMPORARY_BLOCKED` status
 
 Both of those mean "might resolve on its own" (a failed charge retry, a

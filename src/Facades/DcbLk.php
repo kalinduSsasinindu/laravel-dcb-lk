@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\Facade;
  * @method static \DcbLk\Data\CarrierResponse requestOtp(string $subscriberId, array $metadata = [], ?string $appHash = null)
  * @method static \DcbLk\Data\CarrierResponse verifyOtp(string $referenceNo, string $otp)
  * @method static \DcbLk\Data\CarrierResponse sendSms(string $subscriberId, string $message)
+ * @method static \DcbLk\DcbManager extend(string $name, \Closure $callback)
+ * @method static string getDefaultDriver()
  *
  * @see \DcbLk\DcbManager
  */
