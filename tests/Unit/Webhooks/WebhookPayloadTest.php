@@ -49,15 +49,30 @@ final class WebhookPayloadTest extends TestCase
         $this->assertFalse($payload->verified);
     }
 
-    public function test_a_null_expected_secret_skips_verification(): void
+    public function test_an_unconfigured_secret_fails_closed_even_with_no_query_param(): void
     {
+        // A webhook_secret you haven't set up yet must never be treated as
+        // "skip verification" - that would let anyone who finds the route
+        // URL POST a forged payload. See the regression this guards:
+        // https://github.com/kalinduSsasinindu/laravel-dcb-lk (fail-open bug).
         $request = Request::create('/webhooks/ideamart', 'POST', [
             'subscriberId' => 'tel:94771234567',
         ]);
 
         $payload = WebhookPayload::fromRequest($request, null);
 
-        $this->assertTrue($payload->verified);
+        $this->assertFalse($payload->verified);
+    }
+
+    public function test_an_unconfigured_secret_fails_closed_even_if_the_request_sends_one(): void
+    {
+        $request = Request::create('/webhooks/ideamart?secret=anything', 'POST', [
+            'subscriberId' => 'tel:94771234567',
+        ]);
+
+        $payload = WebhookPayload::fromRequest($request, null);
+
+        $this->assertFalse($payload->verified);
     }
 
     public function test_a_missing_status_field_leaves_status_null(): void

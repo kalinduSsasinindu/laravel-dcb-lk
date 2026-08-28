@@ -3,6 +3,24 @@
 All notable changes to `laravel-dcb-lk` are documented here. This project
 follows [Semantic Versioning](https://semver.org/).
 
+## [1.1.0] - 2026-08-28
+
+### Security
+
+- **`WebhookPayload::fromRequest()` now fails closed when `webhook_secret`
+  isn't configured**, instead of treating a `null` secret as "verification
+  not required." Previously, if you never set `IDEAMART_WEBHOOK_SECRET`/
+  `MSPACE_WEBHOOK_SECRET`, every POST to your webhook route was reported
+  as `verified: true` regardless of whether it carried a `?secret=` at
+  all - since a webhook route is a public URL, this meant anyone who found
+  it could POST a forged `subscriberId`/`status` and have a consuming app
+  act on it as genuine. If you're upgrading and see webhooks suddenly
+  rejected, set the relevant `*_WEBHOOK_SECRET` env var and register the
+  same value with the carrier's portal - see the README's Webhooks
+  section.
+- The secret comparison now uses `hash_equals()` instead of `===`, for a
+  timing-safe comparison.
+
 ## [1.0.0] - 2026-08-28
 
 Initial release.

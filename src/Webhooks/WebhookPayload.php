@@ -41,7 +41,14 @@ final class WebhookPayload
 
     public static function fromRequest(Request $request, ?string $expectedSecret): self
     {
-        $verified = $expectedSecret === null || $request->query('secret') === $expectedSecret;
+        // Fail closed: a webhook_secret you haven't configured yet must
+        // never be treated as "verification not required" - that would
+        // let anyone who finds the route URL POST a fake subscriberId +
+        // status and have it accepted. hash_equals() rather than === for
+        // a timing-safe comparison of the actual secret.
+        $verified = $expectedSecret !== null
+            && $request->query('secret') !== null
+            && hash_equals($expectedSecret, (string) $request->query('secret'));
 
         $subscriberId = $request->input('subscriberId');
         $rawStatus = $request->input('status');

@@ -111,6 +111,15 @@ Route::post('/webhooks/ideamart', function (Request $request) {
 });
 ```
 
+**You must set `IDEAMART_WEBHOOK_SECRET`/`MSPACE_WEBHOOK_SECRET` in `.env`
+and register the exact same value with the carrier's portal alongside
+your webhook URL.** `$payload->verified` fails closed: if the secret
+isn't configured, `verified` is always `false` rather than "verification
+skipped" - a webhook route is a public URL, and without a secret anyone
+who finds it can POST a forged `subscriberId`/`status` and have your app
+act on it as if it came from the carrier. Always check `$payload->verified`
+before touching your own data, as in the example above.
+
 ### Adding another provider
 
 Ideamart and mSpace are the two built-in drivers, but the manager isn't
