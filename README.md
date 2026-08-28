@@ -1,5 +1,9 @@
 # laravel-dcb-lk
 
+[![tests](https://github.com/kalindussasinindu/laravel-dcb-lk/actions/workflows/tests.yml/badge.svg)](https://github.com/kalindussasinindu/laravel-dcb-lk/actions/workflows/tests.yml)
+[![Latest Version](https://img.shields.io/packagist/v/kalindussasinindu/laravel-dcb-lk.svg)](https://packagist.org/packages/kalindussasinindu/laravel-dcb-lk)
+[![License](https://img.shields.io/packagist/l/kalindussasinindu/laravel-dcb-lk.svg)](LICENSE)
+
 Direct Carrier Billing for Sri Lanka - a single Laravel driver interface over
 **Ideamart** and **mSpace** (both hSenid Mobile platforms), covering OTP
 subscription registration, status polling, and inbound webhooks.
