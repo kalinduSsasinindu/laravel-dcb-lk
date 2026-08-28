@@ -12,8 +12,37 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php: [8.2, 8.3, 8.4]
-        laravel: ["10.*", "11.*", "12.*"]
+        include:
+          # orchestra/testbench's major has to match the laravel/framework
+          # major it pulls in - leaving it as the wide-open composer.json
+          # range (^8.0|^9.0|^10.0) lets Composer pick e.g. testbench v10
+          # (-> laravel/framework v12) on a job that just required
+          # illuminate/support 10.*, which conflicts (laravel/framework
+          # replaces illuminate/support, they can't coexist).
+          - php: 8.2
+            laravel: "10.*"
+            testbench: "^8.0"
+          - php: 8.3
+            laravel: "10.*"
+            testbench: "^8.0"
+          - php: 8.2
+            laravel: "11.*"
+            testbench: "^9.0"
+          - php: 8.3
+            laravel: "11.*"
+            testbench: "^9.0"
+          - php: 8.4
+            laravel: "11.*"
+            testbench: "^9.0"
+          - php: 8.2
+            laravel: "12.*"
+            testbench: "^10.0"
+          - php: 8.3
+            laravel: "12.*"
+            testbench: "^10.0"
+          - php: 8.4
+            laravel: "12.*"
+            testbench: "^10.0"
 
     name: PHP ${{ matrix.php }} - Laravel ${{ matrix.laravel }}
 
@@ -30,7 +59,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          composer require "illuminate/support:${{ matrix.laravel }}" "illuminate/http:${{ matrix.laravel }}" --no-interaction --no-update
+          composer require "illuminate/support:${{ matrix.laravel }}" "illuminate/http:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" --no-interaction --no-update
           composer update --prefer-dist --no-interaction --no-progress
 
       - name: Run tests
