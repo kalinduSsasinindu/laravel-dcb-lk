@@ -54,5 +54,12 @@
         "test": "phpunit"
     },
     "minimum-stability": "stable",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "config": {
+        "policy": {
+            "advisories": {
+                "block": false
+            }
+        }
+    }
 }
