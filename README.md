@@ -1,6 +1,6 @@
 # laravel-dcb-lk
 
-[![tests](https://github.com/kalindussasinindu/laravel-dcb-lk/actions/workflows/tests.yml/badge.svg)](https://github.com/kalindussasinindu/laravel-dcb-lk/actions/workflows/tests.yml)
+[![tests](https://github.com/kalinduSsasinindu/laravel-dcb-lk/actions/workflows/tests.yml/badge.svg)](https://github.com/kalinduSsasinindu/laravel-dcb-lk/actions/workflows/tests.yml)
 [![Latest Version](https://img.shields.io/packagist/v/kalindussasinindu/laravel-dcb-lk.svg)](https://packagist.org/packages/kalindussasinindu/laravel-dcb-lk)
 [![License](https://img.shields.io/packagist/l/kalindussasinindu/laravel-dcb-lk.svg)](LICENSE)
 
